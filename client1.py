@@ -16,15 +16,15 @@ disc_socket.send_json({
 disc_socket.recv_json()
 
 # Query for Client2's pub port
-disc_socket.send_json({"query": "Client2"})
-client2_info = disc_socket.recv_json()
+disc_socket.send_json({"query": "Client3"})
+client3_info = disc_socket.recv_json()
 
-client1 = DDSClient(pub_port=5555, sub_port=client2_info["pub_port"], name="Client1")
+client1 = DDSClient(pub_port=5555, sub_port=client3_info["pub_port"], name="Client1")
 
 time.sleep(1)
 client1.publish({"id": 1, "text": "Hello from Client 1", "source": "Client1"})
 time.sleep(1)
-client1.listen(lambda msg: print(f"[Client1] Final message: {msg}"))
-
+#client1.listen(lambda msg: print(f"[Client1] Final message: {msg}"))
+client1.listen(lambda msg: print(f"[Client1] Relay of message completed"))
 while True:
     time.sleep(1)

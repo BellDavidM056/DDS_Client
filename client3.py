@@ -4,7 +4,7 @@ from dds_client import DDSClient
 
 def relay_to_client1(msg):
     final_msg = {
-        "id": msg["id"],
+        "id": 3, #msg["id"],
         "text": f"Relayed: {msg['text']}",
         "source": "Client3"
     }
