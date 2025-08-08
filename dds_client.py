@@ -7,20 +7,25 @@ class DDSClient:
     def __init__(self, pub_port=None, sub_port=None, name="DDSClient"):
         self.context = zmq.Context()
         self.name = name
+        self.pub_socket = None
+        self.sub_socket = None
+
         # Publisher setup
         if pub_port:
-            self.pub_socket = self.context.socket(zmq.PUB)
-            self.pub_socket.bind(f"tcp://*:{pub_port}")
-        else:
-            self.pub_socket = None
+            self.setup_publisher(pub_port)
 
         # Subscriber setup
         if sub_port:
-            self.sub_socket = self.context.socket(zmq.SUB)
-            self.sub_socket.connect(f"tcp://localhost:{sub_port}")
-            self.sub_socket.setsockopt_string(zmq.SUBSCRIBE, "")
-        else:
-            self.sub_socket = None
+            self.setup_subscriber(sub_port)
+
+    def setup_publisher(self, pub_port):
+        self.pub_socket = self.context.socket(zmq.PUB)
+        self.pub_socket.bind(f"tcp://*:{pub_port}")
+
+    def setup_subscriber(self, sub_port):
+        self.sub_socket = self.context.socket(zmq.SUB)
+        self.sub_socket.connect(f"tcp://localhost:{sub_port}")
+        self.sub_socket.setsockopt_string(zmq.SUBSCRIBE, "")
 
     def publish(self, message):
         if self.pub_socket:
